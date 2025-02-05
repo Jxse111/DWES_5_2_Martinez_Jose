@@ -89,17 +89,17 @@ class Espectaculos {
      * @param type $espectaculo objeto espectaculo que será el nuevo espectaculo que queremos crear en la base de datos
      * @return string devuelve si se ha realizado o no correctamente la inserción
      */
-    public function altaEspectaculos($espectaculo) {
+    public function altaEspectaculos() {
         $conexionBD = Conexion::conectarEspectaculosMySQLi();
         $mensajeExito = "";
         if (!$conexionBD || $conexionBD->connect_error) {
             $mensajeExito = "Error en la conexión: " . $conexionBD->connect_error;
         }
-        $codigoEspectaculo = $espectaculo->getCdespec();
-        $nombreEspectaculo = $espectaculo->getNombre();
-        $tipoEspectaculo = $espectaculo->getTipo();
-        $estrellasEspectaculo = $espectaculo->getEstrellas();
-        $codigoGrupo = $espectaculo->getCdgru();
+        $codigoEspectaculo = $this->getCdespec();
+        $nombreEspectaculo = $this->getNombre();
+        $tipoEspectaculo = $this->getTipo();
+        $estrellasEspectaculo = $this->getEstrellas();
+        $codigoGrupo = $this->getCdgru();
         if (noExisteCodigoEspectaculo($codigoEspectaculo, $conexionBD)) {
             // Inserción del nuevo espectaculo
             $consultaEspectaculo = "INSERT INTO espectaculo (cdespec, nombre, tipo, estrellas, cdgru) VALUES (?, ?, ?, ?, ?)";
