@@ -200,9 +200,9 @@ class Espectaculos {
     }
 
     /**
-     * Método que muestra el espectáculo existente con todos sus campos
+     * Método que busca el espectáculo existente con todos sus campos
      * @param type $codigoEspectaculo  el código del espectaculo del que queremos observar sus campos
-     * @return string devuelve una cadena de texto en el caso de que se realice correctamente u ocurra algún error
+     * @return string devuelve una cadena de texto en el caso de que falle, sino devuelve un array con todos  los campos de dicho espectaculo
      */
     public static function buscarEspectaculo($codigoEspectaculo) {
         $conexionBD = Conexion::conectarEspectaculosMySQLi();
