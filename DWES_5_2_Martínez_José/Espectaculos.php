@@ -129,7 +129,7 @@ class Espectaculos {
         return $mensajeExito;
     }
 
-//Método actualizar(Lo creé para realizar pruebas)
+//Método actualizar(Lo cree para realizar pruebas)
 //    public function actualizarEspectaculo($espectaculo) {
 //        $conexionBD = Conexion::conectarEspectaculosMySQLi();
 //        $mensajeExito = "";
@@ -204,11 +204,12 @@ class Espectaculos {
      * @param type $codigoEspectaculo  el código del espectaculo del que queremos observar sus campos
      * @return string devuelve una cadena de texto en el caso de que se realice correctamente u ocurra algún error
      */
-    public function mostrarEspectaculo($codigoEspectaculo) {
+    public static function buscarEspectaculo($codigoEspectaculo) {
         $conexionBD = Conexion::conectarEspectaculosMySQLi();
-
+        $mensajeResultado = " ";
+        $esValido = false;
         if (!$conexionBD || $conexionBD->connect_error) {
-            return "Error en la conexión: " . $conexionBD->connect_error;
+            $mensajeResultado = "Error en la conexión: " . $conexionBD->connect_error;
         }
 
         // Verificar si el espectáculo existe
@@ -218,9 +219,32 @@ class Espectaculos {
         $resultado = $consultaExiste->get_result();
 
         if ($resultado->num_rows === 0) {
-            return "El código del espectáculo no existe.";
+            $mensajeResultado = "El código del espectáculo no existe.";
+        } else {
+            $esValido = true;
+            // Obtener los datos
+            $datosEspectaculo = $resultado->fetch_assoc();
+            $consultaExiste->close();
+        }
+        return $esValido ? $datosEspectaculo : $mensajeResultado;
+    }
+
+    public static function mostrarEspectaculo($codigoEspectaculo) {
+        $conexionBD = Conexion::conectarEspectaculosMySQLi();
+        $mensajeResultado = "";
+        if (!$conexionBD || $conexionBD->connect_error) {
+            $mensajeResultado = "Error en la conexión: " . $conexionBD->connect_error;
         }
 
+        // Verificar si el espectáculo existe
+        $consultaExiste = $conexionBD->prepare("SELECT * FROM espectaculo WHERE cdespec = ?");
+        $consultaExiste->bind_param("s", $codigoEspectaculo);
+        $consultaExiste->execute();
+        $resultado = $consultaExiste->get_result();
+
+        if ($resultado->num_rows === 0) {
+            $mensajeResultado = "El código del espectáculo no existe.";
+        }
         // Obtener los datos
         $datosEspectaculo = $resultado->fetch_assoc();
         $mensajeResultado = "Espectáculo encontrado: ";
